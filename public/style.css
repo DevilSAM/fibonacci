@@ -1,0 +1,29 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+    padding: 3rem 5rem;
+}
+input {
+    height: 40px;
+    width: 300px;
+    border: 1px solid grey;
+    border-radius: 10px;
+    font-size: 1.125rem;
+}
+button {
+    margin-left: 3rem;
+    width: 100px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: #fff;
+    border: 2px solid grey;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+button:hover {
+    cursor: pointer;
+    background-color: rgb(201, 201, 201);
+}
+.answer {
+    font-size: 1.5rem;
+    color: green;
+}

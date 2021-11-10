@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fibo</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    
+<div id="vueApp">
+    <form action="/count" method="post">
+        <label for="myNumber">Введите число</label>
+        <input type="number" name="user_num" id="myNumber" v-model="user_input" @input="checkDisabled" @keypress="enterNum">
+        <button :disabled="disable_btn" type="submit" @click.prevent="sendForm()">RUN</button>
+    </form>
+    <h3 id="result"></h3>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<script>
+    let app = new Vue({
+        el: '#vueApp',
+            data: {
+                message: 'Hello Vue!',
+                user_input: "",
+                disable_btn: true,
+            },
+            methods: {
+
+                // метод позволяет вводить только цифры
+                enterNum ($event) {
+                    let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
+                    if (keyCode < 48 || keyCode > 57) {
+                        $event.preventDefault();
+                    }
+                },
+
+                // метод для предотвращения множественного нажати кнопки отправки
+                checkDisabled() {
+                    console.log(this.user_input.length)
+                    this.disable_btn = this.user_input.length == 0
+                },
+
+                // отправка формы на сервер
+                sendForm(e) {
+                    // чтобы не тыкали много раз на кнопку
+                    this.disable_btn = true
+                    // сериализуем данные в json
+                    let user = JSON.stringify({userInput: this.user_input});
+                    let request = new XMLHttpRequest();
+                    // посылаем запрос на адрес "/count"
+                    request.open("POST", "/count", true);   
+                    request.setRequestHeader("Content-Type", "application/json");
+                    request.addEventListener("load", function () {
+                        // получаем и парсим ответ сервера
+                        let res = JSON.parse(request.response);
+                        document.getElementById('result').innerHTML = `Ближайшее число Фибоначчи: <span class='answer'>${res}</span>`
+                    });
+                    request.send(user);
+                }
+            }
+    })
+</script>
+
+</body>
+</html>
